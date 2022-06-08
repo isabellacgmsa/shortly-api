@@ -1,9 +1,9 @@
 import joi from "joi"
 
 const signUpSchema = joi.object({
-        name: joi.required(),
-        email: joi.string().required(),
-        password: joi.string().required(),
+        name: joi.string().max(16).required(),
+        email: joi.string().email().required(),
+        password: joi.string().max(16).required(),
         confirm_password: joi.ref("password")
 }).with("password","confirm_password")
 
