@@ -1,6 +1,6 @@
 import connection from "../db.js"
 
-export default async function signUp(req,res){
+export async function signUp(req,res){
         console.log("entrei")
         const {name, email, password} = req.body
         try{
@@ -12,3 +12,5 @@ export default async function signUp(req,res){
                 return res.send(err)
         }
 }
+
+export default signUp
