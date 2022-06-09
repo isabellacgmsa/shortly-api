@@ -9,7 +9,7 @@ export async function createShortUrl(req, res) {
         const date = dayjs()
         try {
                 const result = await connection.query(
-                        `SELECT * from shortened_urls where id = $1`
+                        `SELECT * from shortened_urls where "sectionId" = $1`
                         ,[section]
                 )
                 if(result.rowCount === 0){
@@ -41,5 +41,27 @@ export async function getShortUrl(req,res){
                 res.send(err)
         }
 }
+export async function redirectUrl(req,res){
+        const {shortUrl} = req.params
 
+        try{
+                const result = await connection.query(
+                        `SELECT  * from shortened_urls where "shortenedUrl" = $1`,[shortUrl]
+                )
+                if(result.rowCount === 0){
+                        return res.sendStatus(404)
+                }
+                const visitCount = result.rows[0].visitCount
+
+                await connection.query(
+                        `UPDATE shortened_urls SET "visitCount" = $1 where "shortenedUrl" = $2`,[visitCount+1, shortUrl]
+                )
+                const url = result.rows[0].url
+
+                res.redirect(`http://${url}`)
+
+        }catch(err){
+                res.send(err)
+        }
+}
 //  7e195e98-97db-4703-86ef-18cec447ab30
