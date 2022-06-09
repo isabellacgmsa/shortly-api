@@ -25,4 +25,21 @@ export async function createShortUrl(req, res) {
                 res.send(err);
         }
 }
+
+export async function getShortUrl(req,res){
+        const {id} = req.params
+        try{
+                const result = await connection.query(
+                  `SELECT id,url,"shortenedUrl" from shortened_urls where id = $1`,[id]
+                );
+
+                if(result.rowCount === 0){
+                        return res.sendStatus(404)
+                }
+                res.status(200).send(result.rows[0])
+        }catch(err){
+                res.send(err)
+        }
+}
+
 //  7e195e98-97db-4703-86ef-18cec447ab30
