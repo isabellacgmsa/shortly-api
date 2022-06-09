@@ -1,0 +1,1 @@
+Eu deveria usar o res.locals em um middleware que não é comum entre todos as funções?
