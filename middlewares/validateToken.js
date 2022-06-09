@@ -3,7 +3,7 @@ import connection from "../db.js"
 export default async function validateToken(req,res,next){
        const { authorization } = req.headers;
        if (!authorization) {
-         return res.status(404).send("authorization missed");
+         return res.status(401).send("authorization missed");
        }
        const token = authorization.replace("Bearer", "").trim();
 
@@ -14,10 +14,8 @@ export default async function validateToken(req,res,next){
                if(result.rowCount !== 1){
                        return res.status(401).send("token not found");
                }
-                const {tokenAvaible} = result.rows[0]
-                if(!tokenAvaible){
-                        return res.status(401).send("token not avaible")
-                }
+
+                res.locals.section = result.rows[0].id
                 next()
 
        }catch(err){

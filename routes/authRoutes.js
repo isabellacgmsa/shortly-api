@@ -3,9 +3,9 @@ import {signUp, signIn} from "../controllers/auth.js"
 import validateSignUp from "../middlewares/validateSignUp.js"
 import validateSignIn from "../middlewares/validateSignIn.js"
 
-const authRoute = Router()
+const authRouter = Router();
 
-authRoute.post("/signup", validateSignUp, signUp);
-authRoute.post("/signin", validateSignIn, signIn);
+authRouter.post("/signup", validateSignUp, signUp);
+authRouter.post("/signin", validateSignIn, signIn);
 
-export default authRoute
+export default authRouter

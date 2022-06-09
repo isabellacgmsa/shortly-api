@@ -2,18 +2,18 @@ import express, {json} from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 
-import authRoute from "./routes/authRoutes.js"
+import authRouter from "./routes/authRoutes.js"
 import getUsers from "./controllers/user.js"
-
+import urlRouter from "./routes/urlRoutes.js"
 dotenv.config()
 const app = express()
 
 app.use(json())
 app.use(cors())
 
-app.use(authRoute)
+app.use(authRouter)
+app.use(urlRouter)
 
-app.get("/users", getUsers)
 
 
 
