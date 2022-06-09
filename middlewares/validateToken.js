@@ -16,6 +16,7 @@ export default async function validateToken(req,res,next){
                }
 
                 res.locals.section = result.rows[0].id
+                res.locals.user = result.rows[0].userId
                 next()
 
        }catch(err){

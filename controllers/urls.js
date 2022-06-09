@@ -41,6 +41,7 @@ export async function getShortUrl(req,res){
                 res.send(err)
         }
 }
+
 export async function redirectUrl(req,res){
         const {shortUrl} = req.params
 
@@ -54,12 +55,46 @@ export async function redirectUrl(req,res){
                 const visitCount = result.rows[0].visitCount
 
                 await connection.query(
-                        `UPDATE shortened_urls SET "visitCount" = $1 where "shortenedUrl" = $2`,[visitCount+1, shortUrl]
+                        `UPDATE shortened_urls SET "visitCount" = $1 where "shortenedUrl" = $2`,[Number(visitCount)+1, shortUrl]
                 )
                 const url = result.rows[0].url
 
                 res.redirect(`http://${url}`)
 
+        }catch(err){
+                res.send(err)
+        }
+}
+
+export async function deleteUrl(req,res){
+        const { id } = req.params
+        const {user} = res.locals
+        console.log(user)
+        try{
+                const urlExist = await connection.query(
+                        `SELECT id from shortened_urls where id = $1`,[id]
+                )
+                if(urlExist.rowCount === 0){
+                        return res.sendStatus(404)
+                }
+                const result = await connection.query(
+                        `SELECT 
+                                * 
+                        from
+                                sections
+                                join shortened_urls
+                                        on sections.id = shortened_urls."sectionId"
+                        where "userId" = $1 and shortened_urls.id = $2`,[user,id]
+                );
+               console.log(result.rows);
+
+                if(result.rowCount !== 1){
+                        return res.sendStatus(401);
+                }
+                await connection.query(
+                  `DELETE FROM shortened_urls WHERE id = $1`,[id]
+                );
+                res.sendStatus(204)
         }catch(err){
                 res.send(err)
         }
