@@ -1,16 +1,17 @@
-import dotenv from "dotenv";
 import pg from "pg";
+import dotenv from "dotenv";
 dotenv.config();
 
 const { Pool } = pg;
-const connection = new Pool({
-  connectionString: process.env.DATABASE_URL
-});
+const configDatabase = {
+  connectionString: process.env.DATABASE_URL,
+};
+
 if (process.env.MODE === "PROD") {
-  connection.ssl = {
+  configDatabase.ssl = {
     rejectUnauthorized: false,
   };
 }
 
-console.log("connected");
+const connection = new Pool({    connectionString: process.env.DATABASE_URL,    ssl: {        rejectUnauthorized: false,    },});
 export default connection;
