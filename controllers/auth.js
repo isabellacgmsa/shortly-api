@@ -40,7 +40,6 @@ export async function  signIn(req,res){
                         where email = $1
                         `,[email]
                 )
-
                 if(result.rowCount !== 1){
                         return res.sendStatus(401);
                 }
@@ -53,7 +52,7 @@ export async function  signIn(req,res){
                 const date = dayjs()
 
                 await connection.query(
-                  `INSERT INTO sections ("token", "createDate", "finishDate","userId" ) values($1,$2,$3,$4)`,
+                  `INSERT INTO sections ("token", "createdAt", "finishDate","userId" ) values($1,$2,$3,$4)`,
                   [token, date, null, userId]
                 );
 

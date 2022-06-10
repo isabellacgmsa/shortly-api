@@ -42,7 +42,8 @@ export async function getRanking(req,res){
 
         try{
                 const result = await connection.query(
-                `SELECT      users.id,
+                `SELECT        users.id,
+                                        users.name,
                                         count(1) as "linksCount", 
                                         sum(su."visitCount") AS "visitCount" 
                         from users

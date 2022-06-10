@@ -13,7 +13,7 @@ create table passwords (
 create table sections(
     "id" serial primary key,
     "token" text not null,
-    "createDate" date not null,
+    "createdAt" date not null default now(),
     "finishDate" date,
     "userId" int not null references "users"("id")
 )
@@ -21,7 +21,7 @@ create table sections(
 create table shortened_urls(
     "id" serial primary key, 
     "sectionId" int not null references "sections"("id"),
-    "createDate" date not null,
+    "createdAt" date not null default now(),
     "url" text not null unique,
     "shortenedUrl" text not null unique,
     "visitCount" bigint not null default 0

@@ -16,4 +16,6 @@ Deixar o banco validar um dado repetido? Ou devo fazer uma requisição para val
     "routine": "_bt_check_unique"
 }
 
+Quando devo validar o http para o redirect? No joi, ou permitir que não seja passado o http e então no redirect fazer uma função para tratar isso?
+
 

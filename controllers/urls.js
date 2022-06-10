@@ -9,14 +9,14 @@ export async function createShortUrl(req, res) {
         const date = dayjs()
         try {
                 const result = await connection.query(
-                        `SELECT * from shortened_urls where "sectionId" = $1`
-                        ,[section]
-                )
-                if(result.rowCount === 0){
+                  `SELECT * from shortened_urls where url = $1`,
+                  [url]
+                );
+                if(result.rowCount !== 0){
                         return res.status(409).send(`url already exist, short_url: ${result.rows[0].shortenedUrl}`)
                 }
                 await connection.query(
-                  `INSERT INTO shortened_urls ("sectionId","createDate","url","shortenedUrl","visitCount") 
+                  `INSERT INTO shortened_urls ("sectionId","createdAt","url","shortenedUrl","visitCount") 
                         values ($1,$2,$3,$4,$5)`,
                   [section, date, url,short_url,0]
                 );
@@ -44,7 +44,6 @@ export async function getShortUrl(req,res){
 
 export async function redirectUrl(req,res){
         const {shortUrl} = req.params
-
         try{
                 const result = await connection.query(
                         `SELECT  * from shortened_urls where "shortenedUrl" = $1`,[shortUrl]
@@ -59,7 +58,7 @@ export async function redirectUrl(req,res){
                 )
                 const url = result.rows[0].url
 
-                res.redirect(`http://${url}`)
+                res.redirect(`${url}`)
 
         }catch(err){
                 res.send(err)
@@ -69,7 +68,6 @@ export async function redirectUrl(req,res){
 export async function deleteUrl(req,res){
         const { id } = req.params
         const {user} = res.locals
-        console.log(user)
         try{
                 const urlExist = await connection.query(
                         `SELECT id from shortened_urls where id = $1`,[id]
@@ -86,7 +84,6 @@ export async function deleteUrl(req,res){
                                         on sections.id = shortened_urls."sectionId"
                         where "userId" = $1 and shortened_urls.id = $2`,[user,id]
                 );
-               console.log(result.rows);
 
                 if(result.rowCount !== 1){
                         return res.sendStatus(401);
