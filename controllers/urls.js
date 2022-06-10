@@ -8,13 +8,6 @@ export async function createShortUrl(req, res) {
         const section = res.locals.section;
         const date = dayjs()
         try {
-                const result = await connection.query(
-                  `SELECT * from shortened_urls where url = $1`,
-                  [url]
-                );
-                if(result.rowCount !== 0){
-                        return res.status(409).send(`url already exist, short_url: ${result.rows[0].shortenedUrl}`)
-                }
                 await connection.query(
                   `INSERT INTO shortened_urls ("sectionId","createdAt","url","shortenedUrl","visitCount") 
                         values ($1,$2,$3,$4,$5)`,
