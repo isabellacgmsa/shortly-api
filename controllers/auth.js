@@ -30,7 +30,6 @@ export async function signUp(req,res){
 
 export async function  signIn(req,res){
         const {email, password}  = req.body
-
         try{
                 const result = await connection.query(
                         `SELECT 
@@ -41,20 +40,22 @@ export async function  signIn(req,res){
                         where email = $1
                         `,[email]
                 )
+
                 if(result.rowCount !== 1){
                         return res.sendStatus(401);
                 }
                 if (!(bcrypt.compareSync(password, result.rows[0].password))) {
-                return res.status(401).send("bad password!")
+                        return res.status(401).send("bad password!")
                 }
 
                 const token = uuid()
-                const id = result.rows[0].id
+                const {userId} = result.rows[0]
                 const date = dayjs()
 
                 await connection.query(
-                        `INSERT INTO sections ("token", "createDate", "finishDate","userId" ) values($1,$2,$3,$4)`,[token,date,null,id]
-                )
+                  `INSERT INTO sections ("token", "createDate", "finishDate","userId" ) values($1,$2,$3,$4)`,
+                  [token, date, null, userId]
+                );
 
                 res.status(200).send(token)
         }catch(err){

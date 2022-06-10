@@ -1,1 +1,19 @@
-Eu deveria usar o res.locals em um middleware que não é comum entre todos as funções?
+Eu deveria usar o res.locals em um middleware que não é comum entre todas as funções?
+
+Deixar o banco validar um dado repetido? Ou devo fazer uma requisição para validar isso?
+
+{
+    "length": 210,
+    "name": "error",
+    "severity": "ERROR",
+    "code": "23505",
+    "detail": "Key (email)=(joao@driven.com.br) already exists.",
+    "schema": "public",
+    "table": "users",
+    "constraint": "users_email_key",
+    "file": "nbtinsert.c",
+    "line": "563",
+    "routine": "_bt_check_unique"
+}
+
+
